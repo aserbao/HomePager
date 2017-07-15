@@ -5,7 +5,6 @@
     android:layout_height="800dp">
 
     <ImageView
-        android:visibility="gone"
         android:id="@+id/home_background"
         android:background="#000000"
         android:layout_width="match_parent"
@@ -17,107 +16,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/home_xingxing" />
-
-    <RelativeLayout
-        android:id="@+id/star_collection_relative_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/home_vortex66"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-
-            android:src="@mipmap/home_vortex66" />
-
-        <ImageView
-            android:id="@+id/home_bubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="60dp"
-            android:src="@mipmap/home_bubble"
-            android:layout_above="@+id/two_frame_layout"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="11dp" />
-
-        <FrameLayout
-            android:id="@+id/one_frame_layout"
-            android:layout_marginLeft="500dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp">
-            <ImageView
-                android:id="@+id/one_star_background"
-                android:layout_gravity="center"
-                android:src="@drawable/home_star_halo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageView
-                android:layout_gravity="center"
-                android:id="@+id/one_star"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/home_star" />
-        </FrameLayout>
-        <FrameLayout
-            android:id="@+id/two_frame_layout"
-            android:layout_marginTop="250dp"
-            android:layout_marginLeft="450dp"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            >
-            <ImageView
-                android:id="@+id/two_star_light"
-                android:src="@drawable/home_light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageView
-                android:id="@+id/two_star_light_spot"
-                android:src="@drawable/home_lightspot"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageView
-                android:id="@+id/two_star"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/home_ball" />
-            <ImageView
-                android:id="@+id/two_star_aperture"
-                android:layout_gravity="center"
-                android:src="@drawable/home_aperture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </FrameLayout>
-        <ImageView
-            android:id="@+id/three_star"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="280dp"
-            android:layout_marginLeft="550dp"
-            android:src="@drawable/home_rankinglist" />
-        <FrameLayout
-            android:id="@+id/four_frame_layout"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="550dp"
-            android:layout_marginBottom="160dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp">
-            <ImageView
-                android:id="@+id/four_star"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/home_maillist" />
-            <ImageView
-                android:visibility="gone"
-                android:id="@+id/four_star_halo"
-                android:src="@drawable/home_star_halo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </FrameLayout>
-    </RelativeLayout>
-
 
 </FrameLayout>

@@ -2,8 +2,11 @@ package com.aserbao.homepager;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,8 +21,8 @@ import android.widget.Toast;
 public class CustomRelativalayout extends RelativeLayout implements GestureDetector.OnGestureListener {
     private GestureDetector mGestureDetector;
     private FrameLayout mOneFragment;
+    private FrameLayout mThreeFrameLayout;
     private FrameLayout mTwoFrameLayout;
-    private ImageView mThreeImageView;
     private FrameLayout mFourFragment;
     private int mOneCutTwoTop;
     private ImageView mOne;
@@ -48,7 +51,7 @@ public class CustomRelativalayout extends RelativeLayout implements GestureDetec
         mGestureDetector.onTouchEvent(event);
         mOneFragment = (FrameLayout) getChildAt(0);
         mTwoFrameLayout = (FrameLayout) getChildAt(1);
-        mThreeImageView = (ImageView) getChildAt(2);
+        mThreeFrameLayout = (FrameLayout) getChildAt(2);
         mFourFragment = (FrameLayout) getChildAt(3);
         if(mIsFirstCreat) {
             mOneCutTwoTop = mTwoFrameLayout.getTop() - mOneFragment.getTop();
@@ -74,22 +77,31 @@ public class CustomRelativalayout extends RelativeLayout implements GestureDetec
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if (mOneFragment != null && mTwoFrameLayout.getTop() - mOneFragment.getTop() > mOneCutTwoTop - 20 || distanceY < 0) {
-            mOneFragment.layout(mOneFragment.getLeft()-(int)distanceX , mOneFragment.getTop()-(int)distanceY, mOneFragment.getRight()-(int)distanceX, mOneFragment.getBottom()-(int)distanceY);
-            mThreeImageView.layout(mThreeImageView.getLeft()-(int)(distanceX*2), mThreeImageView.getTop()-(int)(distanceY*2), mThreeImageView.getRight()-(int)(distanceX*2), mThreeImageView.getBottom()-(int)(distanceY*2));
-            mTwoFrameLayout.layout(mTwoFrameLayout.getLeft()-(int)(distanceX*3), mTwoFrameLayout.getTop()-(int)(distanceY*4), mTwoFrameLayout.getRight()-(int)(distanceX*3), mTwoFrameLayout.getBottom()-(int)(distanceY*4));
-            mFourFragment.layout(mFourFragment.getLeft()-(int)(distanceX*4), mFourFragment.getTop()-(int)(distanceY*6), mFourFragment.getRight()-(int)(distanceX*4), mFourFragment.getBottom()-(int)(distanceY*6));
-        }else {
-            mOneFragment.layout(mOneFragment.getLeft()-(int)distanceX , mOneFragment.getTop(), mOneFragment.getRight()-(int)distanceX, mOneFragment.getBottom());
-            mThreeImageView.layout(mThreeImageView.getLeft()-(int)(distanceX*2), mThreeImageView.getTop(), mThreeImageView.getRight()-(int)(distanceX*2), mThreeImageView.getBottom());
-            mTwoFrameLayout.layout(mTwoFrameLayout.getLeft()-(int)(distanceX*3), mTwoFrameLayout.getTop(), mTwoFrameLayout.getRight()-(int)(distanceX*3), mTwoFrameLayout.getBottom());
-            mFourFragment.layout(mFourFragment.getLeft()-(int)(distanceX*4), mFourFragment.getTop(), mFourFragment.getRight()-(int)(distanceX*4), mFourFragment.getBottom());
+        if(Math.abs(distanceY) < 80) {
+            if (mOneFragment.getTop() < getHeight() + 500 || distanceY > 0) {
+                if (mOneFragment.getLeft() + 500 > 0 || distanceX < 0) {
+                    if (mOneFragment.getRight() - 300 < getWidth() || distanceX > 0) {
+                        if (mOneFragment != null && mTwoFrameLayout.getTop() - mOneFragment.getTop() > mOneCutTwoTop - 20 || distanceY < 0) {
+                            mOneFragment.layout(mOneFragment.getLeft() - (int) distanceX, mOneFragment.getTop() - (int) distanceY, mOneFragment.getRight() - (int) distanceX, mOneFragment.getBottom() - (int) distanceY);
+                            mTwoFrameLayout.layout(mTwoFrameLayout.getLeft() - (int) (distanceX * 2), mTwoFrameLayout.getTop() - (int) (distanceY * 2), mTwoFrameLayout.getRight() - (int) (distanceX * 2), mTwoFrameLayout.getBottom() - (int) (distanceY * 2));
+                            mThreeFrameLayout.layout(mThreeFrameLayout.getLeft() - (int) (distanceX * 3), mThreeFrameLayout.getTop() - (int) (distanceY * 4), mThreeFrameLayout.getRight() - (int) (distanceX * 3), mThreeFrameLayout.getBottom() - (int) (distanceY * 4));
+                            mFourFragment.layout(mFourFragment.getLeft() - (int) (distanceX * 4), mFourFragment.getTop() - (int) (distanceY * 6), mFourFragment.getRight() - (int) (distanceX * 4), mFourFragment.getBottom() - (int) (distanceY * 6));
+                            float v = (mTwoFrameLayout.getTop() - distanceY - mOneFragment.getTop()) / mOneCutTwoTop;
+                            loadScaleAnim(v);
+                        } else {
+                            mOneFragment.layout(mOneFragment.getLeft() - (int) distanceX, mOneFragment.getTop(), mOneFragment.getRight() - (int) distanceX, mOneFragment.getBottom());
+                            mTwoFrameLayout.layout(mTwoFrameLayout.getLeft() - (int) (distanceX * 2), mTwoFrameLayout.getTop(), mTwoFrameLayout.getRight() - (int) (distanceX * 2), mTwoFrameLayout.getBottom());
+                            mThreeFrameLayout.layout(mThreeFrameLayout.getLeft() - (int) (distanceX * 3), mThreeFrameLayout.getTop(), mThreeFrameLayout.getRight() - (int) (distanceX * 3), mThreeFrameLayout.getBottom());
+                            mFourFragment.layout(mFourFragment.getLeft() - (int) (distanceX * 4), mFourFragment.getTop(), mFourFragment.getRight() - (int) (distanceX * 4), mFourFragment.getBottom());
+                        }
+                    }
+                }
+            }
         }
-
-
-        Toast.makeText(getContext(), String.valueOf(distanceX), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), String.valueOf(distanceY), Toast.LENGTH_SHORT).show();
         return false;
     }
+
 
     @Override
     public void onLongPress(MotionEvent e) {
@@ -99,5 +111,64 @@ public class CustomRelativalayout extends RelativeLayout implements GestureDetec
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return false;
+    }
+
+
+    private ScaleAnimation scaleOneAnimation;
+    private ScaleAnimation scaleTwoAnimation;
+    private ScaleAnimation scaleThreeAnimation;
+    private ScaleAnimation scaleFourAnimation;
+    private float scaleTwoDegress;
+    private float scaleThreeDegress;
+    private float scaleFourDegress;
+    private float lastScaleDegress = 1.0f;
+    private float lastTwoScaleDegress = 1.0f;
+    private float lastThreeScaleDegress = 1.0f;
+    private float lastFourScaleDegress = 1.0f;
+    private float scaleDegress = 1.0f;
+    private void loadScaleAnim(float scaleDegres) {
+        if(scaleDegres > 1){
+            scaleDegress = scaleDegres ;
+        }else{
+            return;
+        }
+        scaleTwoDegress = scaleDegress;
+        scaleThreeDegress = scaleDegress;
+        scaleFourDegress = scaleDegress;
+        if (scaleDegress == lastScaleDegress) {
+            return;
+        } else if (scaleDegress > lastScaleDegress){
+            //创建缩放动画
+            scaleOneAnimation = new ScaleAnimation(lastScaleDegress, scaleDegress, lastScaleDegress, scaleDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleTwoAnimation = new ScaleAnimation(lastTwoScaleDegress, scaleTwoDegress, lastTwoScaleDegress, scaleTwoDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleThreeAnimation = new ScaleAnimation(lastThreeScaleDegress, scaleThreeDegress, lastThreeScaleDegress, scaleThreeDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleFourAnimation = new ScaleAnimation(lastFourScaleDegress, scaleFourDegress, lastFourScaleDegress, scaleFourDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        }else {
+            scaleOneAnimation = new ScaleAnimation(scaleDegress, lastScaleDegress, scaleDegress, lastScaleDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleTwoAnimation = new ScaleAnimation(scaleTwoDegress, lastTwoScaleDegress, scaleTwoDegress, lastTwoScaleDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleThreeAnimation = new ScaleAnimation(scaleThreeDegress, lastThreeScaleDegress, scaleThreeDegress, lastThreeScaleDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleFourAnimation = new ScaleAnimation(scaleFourDegress, lastFourScaleDegress, scaleFourDegress, lastFourScaleDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        }
+        lastScaleDegress = scaleDegress;
+        lastTwoScaleDegress = scaleTwoDegress;
+        lastThreeScaleDegress = scaleThreeDegress;
+        lastFourScaleDegress = scaleFourDegress;
+
+        scaleOneAnimation.setFillAfter(true);
+        scaleTwoAnimation.setFillAfter(true);
+        scaleThreeAnimation.setFillAfter(true);
+        scaleFourAnimation.setFillAfter(true);
+        mOneFragment.setAnimation(scaleOneAnimation);
+        mTwoFrameLayout.setAnimation(scaleOneAnimation);
+        mThreeFrameLayout.setAnimation(scaleOneAnimation);
+        mFourFragment.setAnimation(scaleOneAnimation);
     }
 }
