@@ -3,6 +3,7 @@ package com.aserbao.homepager;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -14,6 +15,7 @@ import android.view.ViewParent;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ import java.util.List;
  * Created by aserbao on 2017/7/12.
  */
 public class BackgroundScrollView extends FrameLayout {
+    private static final String TAG = "BackgroundScrollView";
     static final int ANIMATED_SCROLL_GAP = 250;
 
     static final float MAX_SCROLL_FACTOR = 0.5f;
@@ -110,6 +113,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     protected float getTopFadingEdgeStrength() {
+        Log.d(TAG, "getTopFadingEdgeStrength: ");
         if (getChildCount() == 0) {
             return 0.0f;
         }
@@ -124,6 +128,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     protected float getLeftFadingEdgeStrength() {
+        Log.d(TAG, "getLeftFadingEdgeStrength: ");
         if (getChildCount() == 0) {
             return 0.0f;
         }
@@ -138,6 +143,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     protected float getRightFadingEdgeStrength() {
+        Log.d(TAG, "getRightFadingEdgeStrength: ");
         if (getChildCount() == 0) {
             return 0.0f;
         }
@@ -154,6 +160,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     protected float getBottomFadingEdgeStrength() {
+        Log.d(TAG, "getBottomFadingEdgeStrength: ");
         if (getChildCount() == 0) {
             return 0.0f;
         }
@@ -173,15 +180,18 @@ public class BackgroundScrollView extends FrameLayout {
      *   an arrow event.
      */
     public int getMaxScrollAmountV() {
+        Log.d(TAG, "getMaxScrollAmountV: ");
         return (int) (MAX_SCROLL_FACTOR * (getBottom() - getTop()));
     }
 
     public int getMaxScrollAmountH() {
+        Log.d(TAG, "getMaxScrollAmountH: ");
         return (int) (MAX_SCROLL_FACTOR * (getRight() - getLeft()));
     }
 
 
     private void initScrollView() {
+        Log.d(TAG, "initScrollView: ");
         mScroller = new Scroller(getContext());
         setFocusable(true);
         setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
@@ -191,25 +201,20 @@ public class BackgroundScrollView extends FrameLayout {
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
     }
-
     @Override
     public void addView(View child) {
         if (getChildCount() > 0) {
             throw new IllegalStateException("ScrollView can host only one direct child");
         }
-
         super.addView(child);
     }
-
     @Override
     public void addView(View child, int index) {
         if (getChildCount() > 0) {
             throw new IllegalStateException("ScrollView can host only one direct child");
         }
-
         super.addView(child, index);
     }
-
     @Override
     public void addView(View child, ViewGroup.LayoutParams params) {
         if (getChildCount() > 0) {
@@ -218,7 +223,6 @@ public class BackgroundScrollView extends FrameLayout {
 
         super.addView(child, params);
     }
-
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (getChildCount() > 0) {
@@ -232,6 +236,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @return Returns true this ScrollView can be scrolled
      */
     private boolean canScrollV() {
+        Log.d(TAG, "canScrollV: ");
         View child = getChildAt(0);
         if (child != null) {
             int childHeight = child.getHeight();
@@ -241,6 +246,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     private boolean canScrollH() {
+        Log.d(TAG, "canScrollH: ");
         View child = getChildAt(0);
         if (child != null) {
             int childWidth = child.getWidth();
@@ -248,47 +254,10 @@ public class BackgroundScrollView extends FrameLayout {
         }
         return false;
     }
-
-    /**
-     * Indicates whether this ScrollView's content is stretched to fill the viewport.
-     *
-     * @return True if the content fills the viewport, false otherwise.
-     */
-    public boolean isFillViewport() {
-        return mFillViewport;
-    }
-
-    /**
-     * Indicates this ScrollView whether it should stretch its content height to fill
-     * the viewport or not.
-     *
-     * @param fillViewport True to stretch the content's height to the viewport's
-     *        boundaries, false otherwise.
-     */
-    public void setFillViewport(boolean fillViewport) {
-        if (fillViewport != mFillViewport) {
-            mFillViewport = fillViewport;
-            requestLayout();
-        }
-    }
-
-    /**
-     * @return Whether arrow scrolling will animate its transition.
-     */
-    public boolean isSmoothScrollingEnabled() {
-        return mSmoothScrollingEnabled;
-    }
-
-    /**
-     * Set whether arrow scrolling will animate its transition.
-     * @param smoothScrollingEnabled whether arrow scrolling will animate its transition
-     */
-    public void setSmoothScrollingEnabled(boolean smoothScrollingEnabled) {
-        mSmoothScrollingEnabled = smoothScrollingEnabled;
-    }
-
+    
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(TAG, "onMeasure: ");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         if (!mFillViewport) {
@@ -320,6 +289,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        Log.d(TAG, "dispatchKeyEvent: ");
         // Let the focused view and/or our descendants get the key first
         return super.dispatchKeyEvent(event) || executeKeyEvent(event);
     }
@@ -333,6 +303,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @return Return true if the event was handled, else false.
      */
     public boolean executeKeyEvent(KeyEvent event) {
+        Log.d(TAG, "executeKeyEvent: ");
         mTempRect.setEmpty();
 
         boolean handled = false;
@@ -381,6 +352,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     private boolean inChild(int x, int y) {
+        Log.d(TAG, "inChild: ");
         if (getChildCount() > 0) {
             final int scrollX = getScrollX();
             final int scrollY = getScrollY();
@@ -395,17 +367,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        /*
-         * This method JUST determines whether we want to intercept the motion.
-         * If we return true, onMotionEvent will be called and we do the actual
-         * scrolling there.
-         */
-
-        /*
-         * Shortcut the most recurring case: the user is in the dragging
-         * state and he is moving his finger.  We want to intercept this
-         * motion.
-         */
+        Log.d(TAG, "onInterceptTouchEvent: ");
         final int action = ev.getAction();
         if ((action == MotionEvent.ACTION_MOVE) && (mIsBeingDragged)) {
             return true;
@@ -413,18 +375,9 @@ public class BackgroundScrollView extends FrameLayout {
 
         switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_MOVE: {
-            /*
-             * mIsBeingDragged == false, otherwise the shortcut would have caught it. Check
-             * whether the user has moved far enough from his original down touch.
-             */
 
-            /*
-             * Locally do absolute value. mLastMotionY is set to the y value
-             * of the down event.
-             */
                 final int activePointerId = mActivePointerId;
                 if (activePointerId == INVALID_POINTER) {
-                    // If we don't have a valid id, the touch down wasn't on content.
                     break;
                 }
 
@@ -452,26 +405,16 @@ public class BackgroundScrollView extends FrameLayout {
                     break;
                 }
 
-            /*
-             * Remember location of down touch.
-             * ACTION_DOWN always refers to pointer index 0.
-             */
                 mLastMotionY = y;
                 mLastMotionX = x;
                 mActivePointerId = ev.getPointerId(0);
 
-            /*
-             * If being flinged and user touches the screen, initiate drag;
-             * otherwise don't.  mScroller.isFinished should be false when
-             * being flinged.
-             */
                 mIsBeingDragged = !mScroller.isFinished();
                 break;
             }
 
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-            /* Release the drag */
                 mIsBeingDragged = false;
                 mActivePointerId = INVALID_POINTER;
                 break;
@@ -479,17 +422,12 @@ public class BackgroundScrollView extends FrameLayout {
                 onSecondaryPointerUp(ev);
                 break;
         }
-
-        /*
-         * The only time we want to intercept motion events is if we are in the
-         * drag mode.
-         */
         return mIsBeingDragged;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-
+        Log.d(TAG, "onTouchEvent: ");
         if (ev.getAction() == MotionEvent.ACTION_DOWN && ev.getEdgeFlags() != 0) {
             // Don't handle edge touches immediately -- they may actually belong to one of our
             // descendants.
@@ -526,6 +464,7 @@ public class BackgroundScrollView extends FrameLayout {
                 break;
             }
             case MotionEvent.ACTION_MOVE:
+                Toast.makeText(getContext(), String.valueOf(mIsBeingDragged), Toast.LENGTH_SHORT).show();
                 if (mIsBeingDragged) {
                     // Scroll to follow the motion event
                     final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
@@ -585,6 +524,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     private void onSecondaryPointerUp(MotionEvent ev) {
+        Log.d(TAG, "onSecondaryPointerUp: ");
         final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >>
                 MotionEvent.ACTION_POINTER_ID_SHIFT;
         final int pointerId = ev.getPointerId(pointerIndex);
@@ -616,7 +556,7 @@ public class BackgroundScrollView extends FrameLayout {
      *         be found
      */
     private View findFocusableViewInBoundsV(boolean topFocus, int top, int bottom) {
-
+        Log.d(TAG, "findFocusableViewInBoundsV: ");
         List<View> focusables = getFocusables(View.FOCUS_FORWARD);
         View focusCandidate = null;
 
@@ -684,7 +624,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     private View findFocusableViewInBoundsH(boolean leftFocus, int left, int right) {
-
+        Log.d(TAG, "findFocusableViewInBoundsH: ");
         List<View> focusables = getFocusables(View.FOCUS_FORWARD);
         View focusCandidate = null;
 
@@ -763,6 +703,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @return true if the key event is consumed by this method, false otherwise
      */
     public boolean fullScrollV(int direction) {
+        Log.d(TAG, "fullScrollV: ");
         boolean down = direction == View.FOCUS_DOWN;
         int height = getHeight();
 
@@ -782,6 +723,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     public boolean fullScrollH(int direction) {
+        Log.d(TAG, "fullScrollH: ");
         boolean right = direction == View.FOCUS_RIGHT;
         int width = getWidth();
 
@@ -814,6 +756,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @return true if the key event is consumed by this method, false otherwise
      */
     private boolean scrollAndFocusV(int direction, int top, int bottom) {
+        Log.d(TAG, "scrollAndFocusV: ");
         boolean handled = true;
 
         int height = getHeight();
@@ -842,6 +785,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     private boolean scrollAndFocusH(int direction, int left, int right) {
+        Log.d(TAG, "scrollAndFocusH: ");
         boolean handled = true;
 
         int width = getWidth();
@@ -877,7 +821,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @return True if we consumed the event, false otherwise
      */
     public boolean arrowScrollV(int direction) {
-
+        Log.d(TAG, "arrowScrollV: ");
         View currentFocused = findFocus();
         if (currentFocused == this) currentFocused = null;
 
@@ -930,7 +874,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     public boolean arrowScrollH(int direction) {
-
+        Log.d(TAG, "arrowScrollH: ");
         View currentFocused = findFocus();
         if (currentFocused == this) currentFocused = null;
 
@@ -985,10 +929,12 @@ public class BackgroundScrollView extends FrameLayout {
      *  screen.
      */
     private boolean isOffScreenV(View descendant) {
+        Log.d(TAG, "isOffScreenV: ");
         return !isWithinDeltaOfScreenV(descendant, 0, getHeight());
     }
 
     private boolean isOffScreenH(View descendant) {
+        Log.d(TAG, "isOffScreenH: ");
         return !isWithinDeltaOfScreenH(descendant, 0);
     }
 
@@ -997,6 +943,7 @@ public class BackgroundScrollView extends FrameLayout {
      *  pixels of being on the screen.
      */
     private boolean isWithinDeltaOfScreenV(View descendant, int delta, int height) {
+        Log.d(TAG, "isWithinDeltaOfScreenV: ");
         descendant.getDrawingRect(mTempRect);
         offsetDescendantRectToMyCoords(descendant, mTempRect);
 
@@ -1005,6 +952,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     private boolean isWithinDeltaOfScreenH(View descendant, int delta) {
+        Log.d(TAG, "isWithinDeltaOfScreenH: ");
         descendant.getDrawingRect(mTempRect);
         offsetDescendantRectToMyCoords(descendant, mTempRect);
 
@@ -1018,6 +966,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @param delta the number of pixels to scroll by on the Y axis
      */
     private void doScrollY(int delta) {
+        Log.d(TAG, "doScrollY: ");
         if (delta != 0) {
             if (mSmoothScrollingEnabled) {
                 smoothScrollBy(0, delta);
@@ -1028,6 +977,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     private void doScrollX(int delta) {
+        Log.d(TAG, "doScrollX: ");
         if (delta != 0) {
             if (mSmoothScrollingEnabled) {
                 smoothScrollBy(delta, 0);
@@ -1044,6 +994,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @param dy the number of pixels to scroll by on the Y axis
      */
     public void smoothScrollBy(int dx, int dy) {
+        Log.d(TAG, "smoothScrollBy: ");
         if (getChildCount() == 0) {
             // Nothing to do.
             return;
@@ -1061,7 +1012,6 @@ public class BackgroundScrollView extends FrameLayout {
             final int maxX = Math.max(0, right - width);
             final int scrollX = getScrollX();
             dx = Math.max(0, Math.min(scrollX + dx, maxX)) - scrollX;
-
             mScroller.startScroll(scrollX, scrollY, dx, dy);
             invalidate();
         } else {
@@ -1074,21 +1024,12 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     /**
-     * Like {@link #scrollTo}, but scroll smoothly instead of immediately.
-     *
-     * @param x the position where to scroll on the X axis
-     * @param y the position where to scroll on the Y axis
-     */
-    public final void smoothScrollTo(int x, int y) {
-        smoothScrollBy(x - getScrollX(), y - getScrollY());
-    }
-
-    /**
      * <p>The scroll range of a scroll view is the overall height of all of its
      * children.</p>
      */
     @Override
     protected int computeVerticalScrollRange() {
+        Log.d(TAG, "computeVerticalScrollRange: ");
         final int count = getChildCount();
         final int contentHeight = getHeight() - getPaddingBottom() - getPaddingTop();
         if (count == 0) {
@@ -1100,6 +1041,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     protected int computeHorizontalScrollRange() {
+        Log.d(TAG, "computeHorizontalScrollRange: ");
         final int count = getChildCount();
         final int contentWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         if (count == 0) {
@@ -1111,16 +1053,19 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     protected int computeVerticalScrollOffset() {
+        Log.d(TAG, "computeVerticalScrollOffset: ");
         return Math.max(0, super.computeVerticalScrollOffset());
     }
 
     @Override
     protected int computeHorizontalScrollOffset() {
+        Log.d(TAG, "computeHorizontalScrollOffset: ");
         return Math.max(0, super.computeHorizontalScrollOffset());
     }
 
     @Override
     protected void measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec) {
+        Log.d(TAG, "measureChild: ");
         int childWidthMeasureSpec;
         int childHeightMeasureSpec;
 
@@ -1134,6 +1079,7 @@ public class BackgroundScrollView extends FrameLayout {
     @Override
     protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed,
                                            int parentHeightMeasureSpec, int heightUsed) {
+        Log.d(TAG, "measureChildWithMargins: ");
         final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
 
         final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
@@ -1146,23 +1092,8 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     public void computeScroll() {
+        Log.d(TAG, "computeScroll: ");
         if (mScroller.computeScrollOffset()) {
-            // This is called at drawing time by ViewGroup.  We don't want to
-            // re-show the scrollbars at this point, which scrollTo will do,
-            // so we replicate most of scrollTo here.
-            //
-            //         It's a little odd to call onScrollChanged from inside the drawing.
-            //
-            //         It is, except when you remember that computeScroll() is used to
-            //         animate scrolling. So unless we want to defer the onScrollChanged()
-            //         until the end of the animated scrolling, we don't really have a
-            //         choice here.
-            //
-            //         I agree.  The alternative, which I think would be worse, is to post
-            //         something and tell the subclasses later.  This is bad because there
-            //         will be a window where mScrollX/Y is different from what the app
-            //         thinks it is.
-            //
             int x = mScroller.getCurrX();
             int y = mScroller.getCurrY();
 
@@ -1173,7 +1104,6 @@ public class BackgroundScrollView extends FrameLayout {
                 super.scrollTo(x, y);
             }
             awakenScrollBars();
-
             // Keep on drawing until the animation has finished.
             postInvalidate();
         }
@@ -1185,6 +1115,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @param child the View to scroll to
      */
     private void scrollToChild(View child) {
+        Log.d(TAG, "scrollToChild: ");
         child.getDrawingRect(mTempRect);
 
         /* Offset from child's local coordinates to ScrollView coordinates */
@@ -1207,6 +1138,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @return true if scrolling was performed
      */
     private boolean scrollToChildRect(Rect rect, boolean immediate) {
+        Log.d(TAG, "scrollToChildRect: ");
         final int deltaV = computeScrollDeltaToGetChildRectOnScreenV(rect);
         final int deltaH = computeScrollDeltaToGetChildRectOnScreenH(rect);
         final boolean scroll = deltaH != 0 || deltaV != 0;
@@ -1228,6 +1160,7 @@ public class BackgroundScrollView extends FrameLayout {
      * @return The scroll delta.
      */
     protected int computeScrollDeltaToGetChildRectOnScreenV(Rect rect) {
+        Log.d(TAG, "computeScrollDeltaToGetChildRectOnScreenV: ");
         if (getChildCount() == 0) return 0;
 
         int height = getHeight();
@@ -1286,6 +1219,7 @@ public class BackgroundScrollView extends FrameLayout {
     }
 
     protected int computeScrollDeltaToGetChildRectOnScreenH(Rect rect) {
+        Log.d(TAG, "computeScrollDeltaToGetChildRectOnScreenH: ");
         if (getChildCount() == 0) return 0;
 
         int width = getWidth();
@@ -1345,6 +1279,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     public void requestChildFocus(View child, View focused) {
+        Log.d(TAG, "requestChildFocus: ");
         if (!mScrollViewMovedFocus) {
             if (!mIsLayoutDirty) {
                 scrollToChild(focused);
@@ -1376,7 +1311,7 @@ public class BackgroundScrollView extends FrameLayout {
         //        } else if (direction == View.FOCUS_BACKWARD) {
         //            direction = View.FOCUS_LEFT;
         //        }
-
+        Log.d(TAG, "onRequestFocusInDescendants: ");
         final View nextFocus = previouslyFocusedRect == null ?
                 FocusFinder.getInstance().findNextFocus(this, null, direction) :
                 FocusFinder.getInstance().findNextFocusFromRect(this,
@@ -1389,12 +1324,13 @@ public class BackgroundScrollView extends FrameLayout {
         //        if (isOffScreenH(nextFocus)) {
         //            return false;
         //        }
-        return nextFocus.requestFocus(direction, previouslyFocusedRect);
+        return false;
     }
 
     @Override
     public boolean requestChildRectangleOnScreen(View child, Rect rectangle,
                                                  boolean immediate) {
+        Log.d(TAG, "requestChildRectangleOnScreen: ");
         // offset into coordinate space of this scroll view
         rectangle.offset(child.getLeft() - child.getScrollX(),
                 child.getTop() - child.getScrollY());
@@ -1404,12 +1340,14 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     public void requestLayout() {
+        Log.d(TAG, "requestLayout: ");
         mIsLayoutDirty = true;
         super.requestLayout();
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        Log.d(TAG, "onLayout: ");
         super.onLayout(changed, l, t, r, b);
         mIsLayoutDirty = false;
         // Give a child focus if it needs it
@@ -1424,6 +1362,7 @@ public class BackgroundScrollView extends FrameLayout {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        Log.d(TAG, "onSizeChanged: ");
         super.onSizeChanged(w, h, oldw, oldh);
 
         View currentFocused = findFocus();
@@ -1453,6 +1392,7 @@ public class BackgroundScrollView extends FrameLayout {
      * Return true if child is an descendant of parent, (or equal to the parent).
      */
     private boolean isViewDescendantOf(View child, View parent) {
+        Log.d(TAG, "isViewDescendantOf: ");
         if (child == parent) {
             return true;
         }
@@ -1469,6 +1409,7 @@ public class BackgroundScrollView extends FrameLayout {
      *                  which means we want to scroll towards the top.
      */
     public void fling(int velocityX, int velocityY) {
+        Log.d(TAG, "fling: ");
         if (getChildCount() > 0) {
             int width = getWidth() - getPaddingRight() - getPaddingLeft();
             int right = getChildAt(0).getWidth();
@@ -1493,7 +1434,6 @@ public class BackgroundScrollView extends FrameLayout {
             //                mScrollViewMovedFocus = true;
             //                mScrollViewMovedFocus = false;
             //            }
-
             invalidate();
         }
     }
@@ -1505,6 +1445,7 @@ public class BackgroundScrollView extends FrameLayout {
      */
     @Override
     public void scrollTo(int x, int y) {
+        Log.d(TAG, "scrollTo: ");
         // we rely on the fact the View.scrollBy calls scrollTo.
         if (getChildCount() > 0) {
             View child = getChildAt(0);
@@ -1518,39 +1459,12 @@ public class BackgroundScrollView extends FrameLayout {
 
     private int clamp(int n, int my, int child) {
         if (my >= child || n < 0) {
-            /* my >= child is this case:
-             *                    |--------------- me ---------------|
-             *     |------ child ------|
-             * or
-             *     |--------------- me ---------------|
-             *            |------ child ------|
-             * or
-             *     |--------------- me ---------------|
-             *                                  |------ child ------|
-             *
-             * n < 0 is this case:
-             *     |------ me ------|
-             *                    |-------- child --------|
-             *     |-- mScrollX --|
-             */
             return 0;
         }
         if ((my+n) > child) {
-            /* this case:
-             *                    |------ me ------|
-             *     |------ child ------|
-             *     |-- mScrollX --|
-             */
             return child-my;
         }
         return n;
     }
-
-    public boolean isFlingEnabled() {
-        return mFlingEnabled;
-    }
-
-    public void setFlingEnabled(boolean flingEnabled) {
-        this.mFlingEnabled = flingEnabled;
-    }
+    
 }

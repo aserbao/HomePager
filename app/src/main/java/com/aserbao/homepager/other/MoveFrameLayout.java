@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 
 import com.aserbao.homepager.R;
 
@@ -13,7 +14,6 @@ import com.aserbao.homepager.R;
  */
 
 public class MoveFrameLayout extends FrameLayout {
-
 	private int screenWidth;// 屏幕的宽 px
 	private int screenHeight;// 屏幕整体高度（包括手机状态栏）px
 

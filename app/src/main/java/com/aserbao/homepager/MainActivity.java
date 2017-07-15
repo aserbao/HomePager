@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout mFourStarFrameLayout;
     @BindView(R.id.custom_relative_layout)
     CustomRelativalayout mCustomRelativeLayout;
+    @BindView(R.id.background)
+    BackgroundScrollView mBackground;
     private HVScrollViewTwo mHvScrollViewTwo;
 //===================================
 
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mCustomRelativeLayout.onTouchEvent(event);
+        mBackground.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
@@ -92,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
         startAnimators(mOneStarBackground, "rotation", sleepTime, 360f, 0f);
         startAnimators(mTwoStar, "rotation", sleepTime, -15f, 15f, -15f);
         startAnimators(mThreeStar, "rotation", sleepTime, 0f, 360f);
-        startAnimators(mThreeStarLight, "alpha", 5000, 1f, 0f,1f);
-        startAnimators(mThreeStarLightSpot, "scaleX", sleepTime, 1f, 1.3f,1f);
-        startAnimators(mThreeStarLightSpot, "scaleY", sleepTime, 1f, 1.3f,1f);
-        startAnimators(mThreeStarAperture, "rotation", sleepTime, -5f, 5f,-5f);
+        startAnimators(mThreeStarLight, "alpha", 5000, 1f, 0f, 1f);
+        startAnimators(mThreeStarLightSpot, "scaleX", sleepTime, 1f, 1.3f, 1f);
+        startAnimators(mThreeStarLightSpot, "scaleY", sleepTime, 1f, 1.3f, 1f);
+        startAnimators(mThreeStarAperture, "rotation", sleepTime, -5f, 5f, -5f);
 
         startAnimators(mFourStar, "rotation", sleepTime, 360f, 0f);
 

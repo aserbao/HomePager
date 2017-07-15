@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.aserbao.homepager.MainActivity">
-    <com.aserbao.homepager.HVScrollViewTwo
+    <com.aserbao.homepager.BackgroundScrollView
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <FrameLayout
@@ -18,7 +19,7 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/home_background" />
         </FrameLayout>
-    </com.aserbao.homepager.HVScrollViewTwo>
+    </com.aserbao.homepager.BackgroundScrollView>
     <com.aserbao.homepager.CustomRelativalayout
         android:id="@+id/custom_relative_layout"
         android:background="#55000000"
