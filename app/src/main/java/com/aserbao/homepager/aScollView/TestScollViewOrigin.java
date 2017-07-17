@@ -3,12 +3,7 @@ package com.aserbao.homepager.aScollView;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.support.annotation.AttrRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.Px;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.FocusFinder;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -19,7 +14,6 @@ import android.view.ViewParent;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
-import android.widget.Toast;
 
 /**
  * description:
@@ -27,19 +21,25 @@ import android.widget.Toast;
  */
 
 
-public class TestScollView extends FrameLayout {
+public class TestScollViewOrigin extends FrameLayout {
     private Scroller mScroller;
     private PointF mLastMovePoint = new PointF();// 手指最后的的位置
     private float mLastMotionY;
     private float mLastMotionX;
+    private int mTouchSlop;
     private int mMinimumVelocity;
     private int mMaximumVelocity;
 
+    private boolean mSmoothScrollingEnabled = true;
     private boolean mFlingEnabled = true;
     private final Rect mTempRect = new Rect();
+    private long mLastScroll;
 
+    private boolean mIsLayoutDirty = true;
     private View mChildToScrollTo = null;
 
+    private boolean mFillViewport;
+    static final int ANIMATED_SCROLL_GAP = 250;
     private boolean mIsBeingDragged = false;
     /**
      * ID of the active pointer. This is used to retain consistency during
@@ -52,27 +52,80 @@ public class TestScollView extends FrameLayout {
      * Used by {@link #mActivePointerId}.
      */
     private static final int INVALID_POINTER = -1;
-    public TestScollView(@NonNull Context context) {
+    public TestScollViewOrigin( Context context) {
         this(context,null);
     }
 
-    public TestScollView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public TestScollViewOrigin( Context context,  AttributeSet attrs) {
         super(context, attrs);
         initScrollView();
+
     }
 
 
+    //=========================================================requestLayout
+    @Override
+    public void requestLayout() {
+        mIsLayoutDirty = true;
+        super.requestLayout();
+    }
     //========================================================initScrollView
     private void initScrollView() {
         mScroller = new Scroller(getContext());
-        setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);//为子控件获取焦点
+        setFocusable(true);
+        setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
+        setWillNotDraw(false);
         final ViewConfiguration configuration = ViewConfiguration.get(getContext());
+        mTouchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
     }
-
+    //=========================================================onRequestFocusInDescendants
+    @Override
+    protected boolean onRequestFocusInDescendants(int direction,
+                                                  Rect previouslyFocusedRect) {
+        final View nextFocus = previouslyFocusedRect == null ?
+                FocusFinder.getInstance().findNextFocus(this, null, direction) :
+                FocusFinder.getInstance().findNextFocusFromRect(this,
+                        previouslyFocusedRect, direction);
+        if (nextFocus == null) {
+            return false;
+        }
+        return false;
+    }
 
     //============================================onMeasure();
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        if (!mFillViewport) {
+            return;
+        }
+
+        final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        if (heightMode == MeasureSpec.UNSPECIFIED && widthMode == MeasureSpec.UNSPECIFIED) {
+            return;
+        }
+
+        if (getChildCount() > 0) {
+            final View child = getChildAt(0);
+            int height = getMeasuredHeight();
+            int width = getMeasuredWidth();
+            if (child.getMeasuredHeight() < height || child.getMeasuredWidth() < width) {
+                width -= getPaddingLeft();
+                width -= getPaddingRight();
+                int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
+
+                height -= getPaddingTop();
+                height -= getPaddingBottom();
+                int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+
+                child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+            }
+        }
+    }
     @Override
     protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed,
                                            int parentHeightMeasureSpec, int heightUsed) {
@@ -86,6 +139,87 @@ public class TestScollView extends FrameLayout {
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
     // ===========================================onSizeChanged();
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        View currentFocused = findFocus();
+        if (null == currentFocused || this == currentFocused)
+            return;
+        if (isWithinDeltaOfScreenV(currentFocused, 0, oldh)) {
+            currentFocused.getDrawingRect(mTempRect);
+            offsetDescendantRectToMyCoords(currentFocused, mTempRect);
+            int scrollDelta = computeScrollDeltaToGetChildRectOnScreenV(mTempRect);
+            doScrollY(scrollDelta);
+        }
+        final int maxJump = getRight() - getLeft();
+        if (isWithinDeltaOfScreenH(currentFocused, maxJump)) {
+            currentFocused.getDrawingRect(mTempRect);
+            offsetDescendantRectToMyCoords(currentFocused, mTempRect);
+            int scrollDelta = computeScrollDeltaToGetChildRectOnScreenH(mTempRect);
+            doScrollX(scrollDelta);
+        }
+    }
+    private void doScrollY(int delta) {
+        if (delta != 0) {
+            if (mSmoothScrollingEnabled) {
+                smoothScrollBy(0, delta);
+            } else {
+                scrollBy(0, delta);
+            }
+        }
+    }
+    private void doScrollX(int delta) {
+        if (delta != 0) {
+            if (mSmoothScrollingEnabled) {
+                smoothScrollBy(delta, 0);
+            } else {
+                scrollBy(delta, 0);
+            }
+        }
+    }
+    public void smoothScrollBy(int dx, int dy) {
+        if (getChildCount() == 0) {
+            // Nothing to do.
+            return;
+        }
+        long duration = AnimationUtils.currentAnimationTimeMillis() - mLastScroll;
+        if (duration > ANIMATED_SCROLL_GAP) {
+            final int height = getHeight() - getPaddingBottom() - getPaddingTop();
+            final int bottom = getChildAt(0).getHeight();
+            final int maxY = Math.max(0, bottom - height);
+            final int scrollY = getScrollY();
+            dy = Math.max(0, Math.min(scrollY + dy, maxY)) - scrollY;
+
+            final int width = getWidth() - getPaddingRight() - getPaddingLeft();
+            final int right = getChildAt(0).getWidth();
+            final int maxX = Math.max(0, right - width);
+            final int scrollX = getScrollX();
+            dx = Math.max(0, Math.min(scrollX + dx, maxX)) - scrollX;
+            mScroller.startScroll(scrollX, scrollY, dx, dy);
+            invalidate();
+        } else {
+            if (!mScroller.isFinished()) {
+                mScroller.abortAnimation();
+            }
+            scrollBy(dx, dy);
+        }
+        mLastScroll = AnimationUtils.currentAnimationTimeMillis();
+    }
+    private boolean isWithinDeltaOfScreenV(View descendant, int delta, int height) {
+        descendant.getDrawingRect(mTempRect);
+        offsetDescendantRectToMyCoords(descendant, mTempRect);
+
+        return (mTempRect.bottom + delta) >= getScrollY()
+                && (mTempRect.top - delta) <= (getScrollY() + height);
+    }
+    private boolean isWithinDeltaOfScreenH(View descendant, int delta) {
+        descendant.getDrawingRect(mTempRect);
+        offsetDescendantRectToMyCoords(descendant, mTempRect);
+
+        return (mTempRect.right + delta) >= getScrollX()
+                && (mTempRect.left - delta) <= (getScrollX() + getWidth());
+    }
     protected int computeScrollDeltaToGetChildRectOnScreenV(Rect rect) {
         if (getChildCount() == 0) return 0;
 
@@ -205,6 +339,7 @@ public class TestScollView extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+        mIsLayoutDirty = false;
         // Give a child focus if it needs it
         if (mChildToScrollTo != null && isViewDescendantOf(mChildToScrollTo, this)) {
             scrollToChild(mChildToScrollTo);
@@ -231,9 +366,11 @@ public class TestScollView extends FrameLayout {
         if (child == parent) {
             return true;
         }
+
         final ViewParent theParent = child.getParent();
         return (theParent instanceof ViewGroup) && isViewDescendantOf((View) theParent, parent);
     }
+
     //=======================================================ScrollView
     @Override
     public void scrollTo(int x, int y) {
@@ -256,6 +393,7 @@ public class TestScollView extends FrameLayout {
         }
         return n;
     }
+
     //=======================================================computeScroll:
     @Override
     public void computeScroll() {
@@ -273,6 +411,8 @@ public class TestScollView extends FrameLayout {
             postInvalidate();
         }
     }
+
+
     //======================================================onTouchEvent
     @Override
     public boolean onTouchEvent(MotionEvent event) {

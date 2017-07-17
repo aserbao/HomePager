@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>-->
     <com.aserbao.homepager.scroll_view_linearlayout.AScollViewLinearLayout
+        android:visibility="gone"
         android:id="@+id/a_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="60dp">
@@ -19,7 +20,7 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"/>
     </com.aserbao.homepager.scroll_view_linearlayout.AScollViewLinearLayout>
-    <com.aserbao.homepager.aScollView.TestScollView
+    <com.aserbao.homepager.aScollView.ScollViewOne
         android:id="@+id/test_scoll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,7 +28,22 @@
                 android:src="@drawable/home_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-    </com.aserbao.homepager.aScollView.TestScollView>
+        <Button
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher"
+            android:onClick="btn_click"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </com.aserbao.homepager.aScollView.ScollViewOne>
+    <com.aserbao.homepager.aScollView.ScollViewTwo
+        android:id="@+id/test_scoll_view_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:src="@drawable/home_xingxing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.aserbao.homepager.aScollView.ScollViewTwo>
     <!--<com.aserbao.homepager.BackgroundScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,4 +52,4 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </com.aserbao.homepager.BackgroundScrollView>-->
-</LinearLayout>
+</FrameLayout>
