@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".ttt.ScrollActivity">
+    <com.aserbao.homepager.ttt.BackgroundScollView android:id="@+id/backgroud_scroll_view" android:layout_width="match_parent" android:layout_height="match_parent">
+        <ImageView android:src="@drawable/home_background" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </com.aserbao.homepager.ttt.BackgroundScollView>
+    <com.aserbao.homepager.ttt.BackgroundScollView android:id="@+id/xingxing_scroll_view" android:layout_width="match_parent" android:layout_height="match_parent">
+        <ImageView android:src="@drawable/home_xingxing" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </com.aserbao.homepager.ttt.BackgroundScollView>
+    <com.aserbao.homepager.CustomRelativalayout android:id="@+id/custom_relativa_layout" android:layout_width="match_parent" android:layout_height="match_parent">
+        <FrameLayout android:id="@+id/one_star_frame_layout" android:layout_marginTop="50dp" android:layout_marginLeft="80dp" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ImageView android:id="@+id/one_star_background" android:layout_gravity="center" android:src="@drawable/home_star_halo" android:layout_width="70dp" android:layout_height="70dp"/>
+            <ImageView android:id="@+id/one_star" android:layout_gravity="center" android:layout_width="80dp" android:layout_height="80dp" android:src="@drawable/home_star"/>
+        </FrameLayout>
+        <FrameLayout android:id="@+id/two_star_frame_layout" android:layout_marginTop="120dp" android:layout_marginLeft="150dp" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <LinearLayout android:id="@+id/two_star_linear_layout" android:layout_marginLeft="80dp" android:layout_marginTop="70dp" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <ImageView android:id="@+id/two_star_line" android:src="@drawable/sowin_xiantiao" android:layout_width="wrap_content" android:layout_height="match_parent"/>
+                <ImageView android:id="@+id/two_star_text" android:src="@drawable/sowin_pengyou" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <ImageView android:id="@+id/two_star" android:layout_width="150dp" android:layout_height="150dp" android:src="@drawable/home_rankinglist"/>
+        </FrameLayout>
+        <FrameLayout android:id="@+id/three_star_frame_layout" android:layout_marginTop="210dp" android:layout_marginLeft="110dp" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <LinearLayout android:id="@+id/three_star_linear_layout" android:layout_marginLeft="80dp" android:layout_marginTop="80dp" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <ImageView android:id="@+id/three_star_line" android:src="@drawable/sowin_xiantiao" android:layout_width="wrap_content" android:layout_height="match_parent"/>
+                <ImageView android:id="@+id/three_star_text" android:src="@drawable/sowin_yujian" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <ImageView android:id="@+id/three_star_light" android:src="@drawable/home_light" android:layout_width="@dimen/two_start_width" android:layout_height="@dimen/two_start_height"/>
+            <ImageView android:id="@+id/three_star_light_spot" android:src="@drawable/home_lightspot" android:layout_width="@dimen/two_start_width" android:layout_height="@dimen/two_start_height"/>
+            <ImageView android:id="@+id/three_star" android:layout_width="@dimen/two_start_width" android:layout_height="@dimen/two_start_height" android:src="@drawable/home_ball"/>
+            <ImageView android:id="@+id/three_star_aperture" android:src="@drawable/home_aperture" android:layout_width="@dimen/two_start_width" android:layout_height="@dimen/two_start_height"/>
+        </FrameLayout>
+        <FrameLayout android:id="@+id/four_star_frame_layout" android:layout_marginLeft="230dp" android:layout_marginTop="400dp" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <LinearLayout android:id="@+id/four_star_linear_layout" android:layout_marginLeft="60dp" android:layout_marginTop="60dp" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <ImageView android:id="@+id/four_star_line" android:src="@drawable/sowin_xiantiao" android:layout_width="wrap_content" android:layout_height="match_parent"/>
+                <ImageView android:id="@+id/four_star_text" android:src="@drawable/sowin_tongxunlu" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <ImageView android:id="@+id/four_star" android:layout_width="80dp" android:layout_height="80dp" android:src="@drawable/home_maillist"/>
+        </FrameLayout>
+    </com.aserbao.homepager.CustomRelativalayout>
+    <include layout="@layout/activity_home_pager_cover"/>
+</FrameLayout>

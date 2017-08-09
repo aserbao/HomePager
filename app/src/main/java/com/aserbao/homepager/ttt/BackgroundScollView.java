@@ -1,7 +1,9 @@
-package com.aserbao.homepager.aScollView;
+package com.aserbao.homepager.ttt;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -16,7 +18,7 @@ import android.widget.Scroller;
  */
 
 
-public class ScollViewOne extends FrameLayout {
+public class BackgroundScollView extends FrameLayout {
     private Scroller mScroller;
     private PointF mLastMovePoint = new PointF();// 手指最后的的位置
     private float mLastMotionY;
@@ -39,11 +41,11 @@ public class ScollViewOne extends FrameLayout {
      * Used by {@link #mActivePointerId}.
      */
     private static final int INVALID_POINTER = -1;
-    public ScollViewOne(Context context) {
+    public BackgroundScollView(@NonNull Context context) {
         this(context,null);
     }
 
-    public ScollViewOne(Context context, AttributeSet attrs) {
+    public BackgroundScollView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initScrollView();
     }
@@ -85,7 +87,7 @@ public class ScollViewOne extends FrameLayout {
             return 0;
         }
         if ((my+n) > child) {
-            return child-my;
+            return child-my - 10;
         }
         return n;
     }
@@ -95,8 +97,6 @@ public class ScollViewOne extends FrameLayout {
         if (mScroller.computeScrollOffset()) {
             int x = (int) (mScroller.getCurrX() * 1);
             int y = (int)(mScroller.getCurrY() * 1);
-
-
             if (getChildCount() > 0) {
                 View child = getChildAt(0);
                 x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(), child.getWidth());
@@ -108,11 +108,9 @@ public class ScollViewOne extends FrameLayout {
         }
     }
     //======================================================onTouchEvent
-    @Override
+ /*   @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN && event.getEdgeFlags() != 0) {
-            // Don't handle edge touches immediately -- they may actually belong to one of our
-            // descendants.
             return false;
         }
         if (mVelocityTracker == null) {
@@ -123,9 +121,7 @@ public class ScollViewOne extends FrameLayout {
             case MotionEvent.ACTION_DOWN: {
                 final float x = event.getX();
                 final float y = event.getY();
-                if (!(mIsBeingDragged = inChild((int) x, (int) y))) {
-                    return false;
-                }
+
                 if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
                 }
@@ -156,14 +152,12 @@ public class ScollViewOne extends FrameLayout {
                         int initialVelocity = (int) velocityTracker.getYVelocity();
 //                  int initialVelocitx = (int) velocityTracker.getXVelocity(mActivePointerId);
 //                  int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
-
                         if (getChildCount() > 0) {
                             if(Math.abs(initialVelocitx) > initialVelocitx || Math.abs(initialVelocity) > mMinimumVelocity) {
                                 fling(-initialVelocitx, -initialVelocity);
                             }
                         }
                     }
-
                     mActivePointerId = INVALID_POINTER;
                     mIsBeingDragged = false;
 
@@ -184,11 +178,45 @@ public class ScollViewOne extends FrameLayout {
                 }
                 break;
             case MotionEvent.ACTION_POINTER_UP:
-//                onSecondaryPointerUp(event);
+                onSecondaryPointerUp(event);
                 break;
         }
         return false;
+    }*/
+
+    public boolean actionDown(float x,float y){
+        if (!(mIsBeingDragged = inChild((int) x, (int) y))) {
+            return  false;
+        }
+        return false;
     }
+    public void actionMove(int deltaX,int deltaY){
+        if(mIsBeingDragged) {
+            scrollBy(deltaX, deltaY);
+        }
+    }
+    public void actionUp(int initialVelocitx,int initialVelocity) {
+        if (mIsBeingDragged) {
+            if (mFlingEnabled) {
+                if (getChildCount() > 0) {
+                    if (Math.abs(initialVelocitx) > initialVelocitx || Math.abs(initialVelocity) > mMinimumVelocity) {
+
+                    }
+                    fling(-initialVelocitx, -initialVelocity);
+                }
+            }
+        }
+        mIsBeingDragged = false;
+    }
+    public void actionCancel(){
+        if (mIsBeingDragged && getChildCount() > 0) {
+            mIsBeingDragged = false;
+        }
+    }
+
+
+
+
     private boolean inChild(int x, int y) {
         if (getChildCount() > 0) {
             final int scrollX = getScrollX();
@@ -201,7 +229,6 @@ public class ScollViewOne extends FrameLayout {
         }
         return false;
     }
-
     private void onSecondaryPointerUp(MotionEvent ev) {
         final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >>
                 MotionEvent.ACTION_POINTER_ID_SHIFT;
@@ -236,20 +263,6 @@ public class ScollViewOne extends FrameLayout {
             mScroller.fling(getScrollX(), getScrollY(), velocityX, velocityY,
                     0, Math.max(0, right - width),
                     0, Math.max(0, bottom - height));
-
-            //            final boolean movingDown = velocityX > 0 || velocityY > 0;
-            //
-            //            View newFocused =
-            //                    findFocusableViewInMyBoundsV(movingDown, mScroller.getFinalY(), findFocus());
-            //            if (newFocused == null) {
-            //                newFocused = this;
-            //            }
-            //
-            //            if (newFocused != findFocus()
-            //                    && newFocused.requestFocus(movingDown ? View.FOCUS_DOWN : View.FOCUS_UP)) {
-            //                mScrollViewMovedFocus = true;
-            //                mScrollViewMovedFocus = false;
-            //            }
             invalidate();
         }
     }

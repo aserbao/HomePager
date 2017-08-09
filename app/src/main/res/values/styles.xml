@@ -7,5 +7,31 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="mystyle" parent="AppTheme.NoActionBar">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+    <style name="mystyle1" parent="AppTheme.NoActionBar">
+        <item name="android:windowIsFloating">true</item>
+    </style>
+    <style name="myStyle" parent="AppTheme.NoActionBar">
+        <item name="android:activityOpenEnterAnimation">@anim/enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/exit</item>
+    </style>
+    <style name="myAnimation">
+        <item name="android:activityOpenEnterAnimation">@anim/enter</item>
+        <!-- 指定显示的动画xml -->
+        <item name="android:activityCloseExitAnimation">@anim/exit</item>
+    </style>
+   <!--
+   <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+   <item name="@android:windowEnterAnimation">@anim/enter</item>
+    <item name="@android:windowExitAnimation">@anim/exit</item>-->
 </resources>

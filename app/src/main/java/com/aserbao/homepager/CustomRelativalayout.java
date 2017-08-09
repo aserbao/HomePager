@@ -77,17 +77,19 @@ public class CustomRelativalayout extends RelativeLayout implements GestureDetec
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if(Math.abs(distanceY) < 80) {
+        if(Math.abs(distanceY) < 100) {
             if (mOneFragment.getTop() < getHeight() + 500 || distanceY > 0) {
                 if (mOneFragment.getLeft() + 500 > 0 || distanceX < 0) {
                     if (mOneFragment.getRight() - 300 < getWidth() || distanceX > 0) {
                         if (mOneFragment != null && mTwoFrameLayout.getTop() - mOneFragment.getTop() > mOneCutTwoTop - 20 || distanceY < 0) {
-                            mOneFragment.layout(mOneFragment.getLeft() - (int) distanceX, mOneFragment.getTop() - (int) distanceY, mOneFragment.getRight() - (int) distanceX, mOneFragment.getBottom() - (int) distanceY);
-                            mTwoFrameLayout.layout(mTwoFrameLayout.getLeft() - (int) (distanceX * 2), mTwoFrameLayout.getTop() - (int) (distanceY * 2), mTwoFrameLayout.getRight() - (int) (distanceX * 2), mTwoFrameLayout.getBottom() - (int) (distanceY * 2));
-                            mThreeFrameLayout.layout(mThreeFrameLayout.getLeft() - (int) (distanceX * 3), mThreeFrameLayout.getTop() - (int) (distanceY * 4), mThreeFrameLayout.getRight() - (int) (distanceX * 3), mThreeFrameLayout.getBottom() - (int) (distanceY * 4));
-                            mFourFragment.layout(mFourFragment.getLeft() - (int) (distanceX * 4), mFourFragment.getTop() - (int) (distanceY * 6), mFourFragment.getRight() - (int) (distanceX * 4), mFourFragment.getBottom() - (int) (distanceY * 6));
                             float v = (mTwoFrameLayout.getTop() - distanceY - mOneFragment.getTop()) / mOneCutTwoTop;
-                            loadScaleAnim(v);
+                            if(v > 1 || distanceY < 0) {
+                                mOneFragment.layout(mOneFragment.getLeft() - (int) distanceX, mOneFragment.getTop() - (int) distanceY, mOneFragment.getRight() - (int) distanceX, mOneFragment.getBottom() - (int) distanceY);
+                                mTwoFrameLayout.layout(mTwoFrameLayout.getLeft() - (int) (distanceX * 2), mTwoFrameLayout.getTop() - (int) (distanceY * 2), mTwoFrameLayout.getRight() - (int) (distanceX * 2), mTwoFrameLayout.getBottom() - (int) (distanceY * 2));
+                                mThreeFrameLayout.layout(mThreeFrameLayout.getLeft() - (int) (distanceX * 3), mThreeFrameLayout.getTop() - (int) (distanceY * 4), mThreeFrameLayout.getRight() - (int) (distanceX * 3), mThreeFrameLayout.getBottom() - (int) (distanceY * 4));
+                                mFourFragment.layout(mFourFragment.getLeft() - (int) (distanceX * 4), mFourFragment.getTop() - (int) (distanceY * 6), mFourFragment.getRight() - (int) (distanceX * 4), mFourFragment.getBottom() - (int) (distanceY * 6));
+                                loadScaleAnim(v);
+                            }
                         } else {
                             mOneFragment.layout(mOneFragment.getLeft() - (int) distanceX, mOneFragment.getTop(), mOneFragment.getRight() - (int) distanceX, mOneFragment.getBottom());
                             mTwoFrameLayout.layout(mTwoFrameLayout.getLeft() - (int) (distanceX * 2), mTwoFrameLayout.getTop(), mTwoFrameLayout.getRight() - (int) (distanceX * 2), mTwoFrameLayout.getBottom());
@@ -128,9 +130,9 @@ public class CustomRelativalayout extends RelativeLayout implements GestureDetec
     private float scaleDegress = 1.0f;
     private void loadScaleAnim(float scaleDegres) {
         if(scaleDegres > 1){
-            scaleDegress = scaleDegres ;
+            scaleDegress = 1+(float)(scaleDegres * 0.3) ;
         }else{
-            return;
+            scaleDegress = scaleDegres;
         }
         scaleTwoDegress = scaleDegress;
         scaleThreeDegress = scaleDegress;

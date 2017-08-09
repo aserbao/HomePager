@@ -643,7 +643,7 @@ public class HVScrollViewTwo extends FrameLayout {
                 mActivePointerId = ev.getPointerId(0);
                 break;
             }
-         /*   case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_MOVE:
 
                 if (mIsBeingDragged) {
                     // Scroll to follow the motion event
@@ -682,7 +682,7 @@ public class HVScrollViewTwo extends FrameLayout {
                         mIsFirstCreat = false;
                     }
 //                    if (getScrollY() < maxY && (fourStarFrameLayout.getBottom() - deltaY * 4 <= bgHeitht) && (fourStarFrameLayout.getBottom() - deltaY * 4 >= bgHeitht - 1400)) {
-                    /*//**//**//***********星星滑动加速***********//**//**//*
+                    /**********星星滑动加速***********/
                     if (twoStarImageView.getBottom() - deltaY - oneStarFrameLayout.getBottom() > mImageChaBottom || deltaY < 0) {
                         oneStarFrameLayout.layout(oneStarFrameLayout.getLeft(), oneStarFrameLayout.getTop() - deltaY,
                                 oneStarFrameLayout.getRight(), oneStarFrameLayout.getBottom() - deltaY);
@@ -695,17 +695,17 @@ public class HVScrollViewTwo extends FrameLayout {
                         float v = (twoStarImageView.getBottom() - deltaY - oneStarFrameLayout.getBottom()) / mImageChaBottom;
 
                         loadScaleAnim(v);
-                              *//*   if (fourStarFrameLayout.getBottom() <= bgHeitht - 1000) {     //星球大小回到原状
+                                 if (fourStarFrameLayout.getBottom() <= bgHeitht - 1000) {     //星球大小回到原状
                                         loadStarsAnim(true, deltaY);            //加载星星动画
                                 } else {
                                     loadStarsAnim(false, deltaY);            //加载星星动画
-                                }*//*
+                                }
                     }
                 }
 
 
 //                }
-                break;*/
+                break;
             case MotionEvent.ACTION_UP:
                 Log.d(TAG, "onTouchEvent() called with: ev = [" + ev + "]");
                 if (mIsBeingDragged) {
@@ -1453,7 +1453,7 @@ public class HVScrollViewTwo extends FrameLayout {
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
             // This is called at drawing time by ViewGroup.  We don't want to
-            // re-show the scrollbars at this point, which scrollTo will do,
+            // re-showClick the scrollbars at this point, which scrollTo will do,
             // so we replicate most of scrollTo here.
             //
             //         It's a little odd to call onScrollChanged from inside the drawing.

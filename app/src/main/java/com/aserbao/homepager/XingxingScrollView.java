@@ -1147,7 +1147,7 @@ public class XingxingScrollView extends FrameLayout {
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
             // This is called at drawing time by ViewGroup.  We don't want to
-            // re-show the scrollbars at this point, which scrollTo will do,
+            // re-showClick the scrollbars at this point, which scrollTo will do,
             // so we replicate most of scrollTo here.
             //
             //         It's a little odd to call onScrollChanged from inside the drawing.
