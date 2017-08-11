@@ -1,18 +1,26 @@
 package com.aserbao.homepager.customview.flowlayout;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RadioButton;
+
+import com.aserbao.homepager.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class HorizationFlowLayout extends ViewGroup
 {
-
+	String[] sName = {"大黄","铳刘价格的空","走走回家去","油菜花走走走","回家走走走走","回家"};
 	private static final String TAG = "FlowLayout";
 
 
@@ -23,12 +31,20 @@ public class HorizationFlowLayout extends ViewGroup
 	}
 
 	private void init(Context mContext) {
+		Random random = new Random();
 		for (int i = 0; i < 150; i++) {
-			Button button = new Button(mContext);
-			button.setText(String.valueOf(i));
-			button.setWidth(100);
-			button.setHeight(60);
-			this.addView(button);
+			RadioButton rb = new RadioButton(mContext);
+			int anInt = random.nextInt(sName.length);
+			rb.setText(sName[anInt]);
+			rb.setMaxLines(1);
+			rb.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
+			rb.setButtonDrawable(null);
+
+			rb.setWidth(280);
+			rb.setHeight(190+random.nextInt(300));
+			Drawable drawable = getResources().getDrawable(R.drawable.help_dian);
+			rb.setCompoundDrawablesWithIntrinsicBounds(null,null,null,drawable);
+			this.addView(rb);
 		}
 	}
 
@@ -122,8 +138,8 @@ public class HorizationFlowLayout extends ViewGroup
 			}
 
 		}
-		setMeasuredDimension((modeWidth == MeasureSpec.EXACTLY) ? sizeWidth
-				: width, (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight
+		setMeasuredDimension((modeWidth == MeasureSpec.EXACTLY) ? sizeWidth + 400
+				: width + 400, (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight
 				: height);
 
 	}
@@ -213,8 +229,9 @@ public class HorizationFlowLayout extends ViewGroup
 
 				Log.e(TAG, child + " , l = " + lc + " , t = " + t + " , r ="
 						+ rc + " , b = " + bc);
-
-				child.layout(lc, tc, rc, bc);
+				Random random = new Random();
+				int i5 = random.nextInt(10);
+				child.layout(lc+i5, tc, rc+i5, bc);
 				
 				top += child.getMeasuredHeight() + lp.topMargin
 						+ lp.bottomMargin;

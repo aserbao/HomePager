@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scroll_flow_layout"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
+    android:background="@drawable/help_bg"
     tools:context="com.aserbao.homepager.test.TestActivity">
-
-    <com.aserbao.homepager.customview.flowlayout.HorizationFlowLayout
-        android:layout_marginTop="25dp"
-        android:id="@+id/flow_layout"
+    <HorizontalScrollView
+        android:layout_above="@+id/show_linear_layout"
+        android:id="@+id/scroll_flow_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        >
+        <com.aserbao.homepager.customview.flowlayout.HorizationFlowLayout
+            android:layout_marginTop="25dp"
+            android:id="@+id/flow_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.aserbao.homepager.customview.flowlayout.HorizationFlowLayout>
+    </HorizontalScrollView>
+    <LinearLayout
+        android:layout_above="@+id/text_matching"
+        android:id="@+id/show_linear_layout"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-    </com.aserbao.homepager.customview.flowlayout.HorizationFlowLayout>
-
-</HorizontalScrollView>
+        <ImageView
+            android:src="@drawable/help_left"
+            android:layout_marginLeft="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:layout_weight="1"
+            android:src="@drawable/help_center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:layout_marginRight="25dp"
+            android:src="@drawable/help_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/text_matching"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:text="点击开始匹配"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
