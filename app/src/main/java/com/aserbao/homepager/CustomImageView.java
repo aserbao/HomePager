@@ -30,6 +30,4 @@ public class CustomImageView extends ImageView {
         alpha.setInterpolator(new CycleInterpolator(0.5f));
         alpha.start();
     }
-
-
 }

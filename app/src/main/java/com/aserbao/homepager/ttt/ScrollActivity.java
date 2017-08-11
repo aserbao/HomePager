@@ -1,7 +1,11 @@
 package com.aserbao.homepager.ttt;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -9,6 +13,7 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -22,7 +27,7 @@ import com.aserbao.homepager.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ScrollActivity extends AppCompatActivity {
+public class ScrollActivity extends AppCompatActivity implements OnGestureListener{
     private static final int INVALID_POINTER = -1;
     @BindView(R.id.backgroud_scroll_view)
     BackgroundScollView mBackground;
@@ -83,6 +88,7 @@ public class ScrollActivity extends AppCompatActivity {
     private int mMaximumVelocity;
     private int mActivePointerId = INVALID_POINTER;
     private boolean mIsFirstCreat = true;
+    private GestureDetector mGestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +117,7 @@ public class ScrollActivity extends AppCompatActivity {
         mTwoFrameLayout = (FrameLayout) mCustomRelativaLayout.getChildAt(1);
         mThreeFrameLayout = (FrameLayout) mCustomRelativaLayout.getChildAt(2);
         mFourFragment = (FrameLayout) mCustomRelativaLayout.getChildAt(3);
+        mGestureDetector = new GestureDetector(this);
     }
 
     @Override
@@ -121,6 +128,7 @@ public class ScrollActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        mGestureDetector.onTouchEvent(event);
         if(mIsFirstCreat) {
             mOneCutTwoTop = mTwoFrameLayout.getTop() - mOneFragment.getTop();
             mIsFirstCreat = false;
@@ -155,9 +163,9 @@ public class ScrollActivity extends AppCompatActivity {
                 final float x = event.getX(activePointerIndex);
                 final int deltaX = (int) (mLastMotionX - x);
                 mLastMotionX = x;
-                mBackground.actionMove(deltaX, deltaY);
+              /*  mBackground.actionMove(deltaX, deltaY);
                 mXingxing.actionMove(deltaX, deltaY);
-                ballMove(deltaX,deltaY);
+                ballMove(deltaX,deltaY);*/
                 break;
             case MotionEvent.ACTION_UP:
                 final VelocityTracker velocityTracker = mVelocityTracker;
@@ -240,16 +248,36 @@ public class ScrollActivity extends AppCompatActivity {
     private float lastFourScaleDegress = 1.0f;
     private float scaleDegress = 1.0f;
     private void loadScaleAnim(float scaleDegres) {
-        if(scaleDegres > 1){
-            scaleDegress = 1+(float)(scaleDegres * 0.3) ;
-        }else{
-            scaleDegress = scaleDegres;
+        if (scaleDegres >= 1) {
+            scaleDegress = 1 + (float) ((scaleDegres - 1) * 0.3);
+            scaleTwoDegress = scaleDegres;
+            scaleThreeDegress = scaleDegres;
+            scaleFourDegress = scaleDegres;
         }
-        scaleTwoDegress = scaleDegress;
-        scaleThreeDegress = scaleDegress;
-        scaleFourDegress = scaleDegress;
         if (scaleDegress == lastScaleDegress) {
             return;
+        }else if(true){
+            PropertyValuesHolder scaleX = PropertyValuesHolder.ofFloat("scaleX", lastScaleDegress, scaleDegress);
+            PropertyValuesHolder scale2X = PropertyValuesHolder.ofFloat("scaleX", lastTwoScaleDegress, scaleTwoDegress);
+            PropertyValuesHolder scaleY = PropertyValuesHolder.ofFloat("scaleY", lastScaleDegress, scaleDegress);
+            PropertyValuesHolder scale2Y = PropertyValuesHolder.ofFloat("scaleY", lastTwoScaleDegress, scaleTwoDegress);
+            ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(mOneFragment, scaleX, scaleY);
+            ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(mTwoFrameLayout, scale2X, scale2Y);
+            ObjectAnimator objectAnimator3 = ObjectAnimator.ofPropertyValuesHolder(mThreeFrameLayout, scale2X, scale2Y);
+            ObjectAnimator objectAnimator4 = ObjectAnimator.ofPropertyValuesHolder(mFourFragment, scale2X, scale2Y);
+            objectAnimator.setDuration(10);
+            objectAnimator2.setDuration(10);
+            objectAnimator3.setDuration(10);
+            objectAnimator4.setDuration(10);
+            objectAnimator.start();
+            objectAnimator2.start();
+            objectAnimator3.start();
+            objectAnimator4.start();
+
+
+          /*  startAnimators(mOneFragment,"scaleX",0,lastScaleDegress,scaleDegress);
+            startAnimators(mOneFragment,"scaleY",0,lastScaleDegress,scaleDegress);*/
+
         } else if (scaleDegress > lastScaleDegress){
             //创建缩放动画
             scaleOneAnimation = new ScaleAnimation(lastScaleDegress, scaleDegress, lastScaleDegress, scaleDegress,
@@ -275,13 +303,53 @@ public class ScrollActivity extends AppCompatActivity {
         lastThreeScaleDegress = scaleThreeDegress;
         lastFourScaleDegress = scaleFourDegress;
 
-        scaleOneAnimation.setFillAfter(true);
+        /*  scaleOneAnimation.setFillAfter(true);
         scaleTwoAnimation.setFillAfter(true);
         scaleThreeAnimation.setFillAfter(true);
         scaleFourAnimation.setFillAfter(true);
         mOneFragment.setAnimation(scaleOneAnimation);
         mTwoFrameLayout.setAnimation(scaleOneAnimation);
         mThreeFrameLayout.setAnimation(scaleOneAnimation);
-        mFourFragment.setAnimation(scaleOneAnimation);
+        mFourFragment.setAnimation(scaleOneAnimation);*/
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        mBackground.actionMove((int)distanceX, (int)distanceY);
+        mXingxing.actionMove((int)distanceX,(int) distanceY);
+        ballMove((int)distanceX,(int)distanceY);
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+    private void startAnimators(Object object, String s, int duration, float... vales) {
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(object, s, vales);
+        rotation.setRepeatCount(-1);
+        rotation.setInterpolator(new LinearInterpolator());
+        rotation.setDuration(duration);
+        rotation.start();
     }
 }

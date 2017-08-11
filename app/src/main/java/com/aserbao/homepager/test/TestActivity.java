@@ -1,40 +1,38 @@
 package com.aserbao.homepager.test;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.HorizontalScrollView;
 
 import com.aserbao.homepager.R;
+import com.aserbao.homepager.customview.flowlayout.HorizationFlowLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TestActivity extends AppCompatActivity {
 
-    private List<Integer> mList = new ArrayList<>();
+    @BindView(R.id.flow_layout)
+    HorizationFlowLayout mFlowLayout;
+    @BindView(R.id.scroll_flow_layout)
+    HorizontalScrollView mScrollFlowLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_test);
-        init();
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        ButterKnife.bind(this);
     }
 
-    private void init() {
-        for (int i = 0; i < 10; i++) {
-            mList.add(i);
-        }
-    }
-
-    public void showClick(View view) {
-        int s = 5;
-        /*for (int i = 0; i < mList.size(); i++) {
-            if (mList.get(i) == s) {
-                mList.remove(i);
-            }
-        }*/
-        mList.set(4,100);
-        Toast.makeText(this, mList.toString()+ "\n"+mList.get(4), Toast.LENGTH_SHORT).show();
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mScrollFlowLayout.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 }
