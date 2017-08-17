@@ -20,17 +20,17 @@ import java.util.Random;
 
 public class HorizationFlowLayout extends ViewGroup
 {
-	String[] sName = {"大黄","铳刘价格的空","走走回家去","油菜花走走走","回家走走走走","回家"};
+	String[] sName = {"大黄","铳刘","走走","油菜","回家"};
 	private static final String TAG = "FlowLayout";
 
 
 	public HorizationFlowLayout(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		init(context);
+		init(context,attrs);
 	}
 
-	private void init(Context mContext) {
+	private void init(Context mContext,AttributeSet attrs) {
 		Random random = new Random();
 		for (int i = 0; i < 150; i++) {
 			RadioButton rb = new RadioButton(mContext);
@@ -39,9 +39,12 @@ public class HorizationFlowLayout extends ViewGroup
 			rb.setMaxLines(1);
 			rb.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 			rb.setButtonDrawable(null);
-
-			rb.setWidth(280);
-			rb.setHeight(190+random.nextInt(300));
+			MarginLayoutParams layoutParams = new MarginLayoutParams(mContext,attrs);
+			layoutParams.setMargins(random.nextInt(200),random.nextInt(100),0,0);
+			rb.setLayoutParams(layoutParams);
+			/*rb.setWidth(90);
+			rb.setHeight(91);*/
+//			rb.setHeight(190+random.nextInt(300));
 			Drawable drawable = getResources().getDrawable(R.drawable.help_dian);
 			rb.setCompoundDrawablesWithIntrinsicBounds(null,null,null,drawable);
 			this.addView(rb);
@@ -138,8 +141,8 @@ public class HorizationFlowLayout extends ViewGroup
 			}
 
 		}
-		setMeasuredDimension((modeWidth == MeasureSpec.EXACTLY) ? sizeWidth + 400
-				: width + 400, (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight
+		setMeasuredDimension((modeWidth == MeasureSpec.EXACTLY) ? sizeWidth
+				: width , (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight
 				: height);
 
 	}
