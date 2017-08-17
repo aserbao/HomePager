@@ -14,7 +14,7 @@ import com.aserbao.homepager.customview.flowlayout.HorizationFlowLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TestActivity extends AppCompatActivity {
+public class HorizontalFloatLayoutActivity extends AppCompatActivity {
 
     @BindView(R.id.flow_layout)
     HorizationFlowLayout mFlowLayout;
