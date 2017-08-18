@@ -84,4 +84,5 @@
         android:layout_toRightOf="@+id/iv_level"
         android:text="等级"
         android:textColor="#ffffff" />
+
 </RelativeLayout>

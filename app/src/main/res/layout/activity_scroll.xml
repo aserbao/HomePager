@@ -37,4 +37,13 @@
         </FrameLayout>
     </com.aserbao.homepager.CustomRelativalayout>
     <include layout="@layout/activity_home_pager_cover"/>
+    <FrameLayout
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.aserbao.homepager.customview.customview.MeteorView
+            android:src="@drawable/help_dian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 </FrameLayout>
