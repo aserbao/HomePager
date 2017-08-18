@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/help_bg"
-    tools:context="com.aserbao.homepager.test.TestActivity">
+    tools:context="com.aserbao.homepager.test.HorizontalFloatLayoutActivity">
     <HorizontalScrollView
         android:layout_above="@+id/show_linear_layout"
         android:id="@+id/scroll_flow_layout"

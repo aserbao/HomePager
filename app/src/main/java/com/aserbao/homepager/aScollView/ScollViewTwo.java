@@ -161,7 +161,6 @@ public class ScollViewTwo extends FrameLayout {
                             if(Math.abs(initialVelocitx) > initialVelocitx || Math.abs(initialVelocity) > mMinimumVelocity) {
                                 fling(-initialVelocitx, -initialVelocity);
                             }
-
                         }
                     }
 
@@ -202,6 +201,7 @@ public class ScollViewTwo extends FrameLayout {
         }
         return false;
     }
+
     private void onSecondaryPointerUp(MotionEvent ev) {
         final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >>
                 MotionEvent.ACTION_POINTER_ID_SHIFT;

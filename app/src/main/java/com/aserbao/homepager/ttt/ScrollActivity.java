@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
@@ -93,6 +94,12 @@ public class ScrollActivity extends AppCompatActivity implements OnGestureListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Log.e("Throwable", "uncaughtException: ",e );
+            }
+        });
         /*getWindow().getDecorView().animate().scaleX(2.0f).scaleY(2.0f).setDuration(5000).start();*/
         requestWindowFeature(getWindow().FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
@@ -126,75 +133,7 @@ public class ScrollActivity extends AppCompatActivity implements OnGestureListen
         super.onPause();
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        mGestureDetector.onTouchEvent(event);
-        if(mIsFirstCreat) {
-            mOneCutTwoTop = mTwoFrameLayout.getTop() - mOneFragment.getTop();
-            mIsFirstCreat = false;
-        }
-        if (event.getAction() == MotionEvent.ACTION_DOWN && event.getEdgeFlags() != 0) {
-            return false;
-        }
-        if (mVelocityTracker == null) {
-            mVelocityTracker = VelocityTracker.obtain();
-        }
-        mVelocityTracker.addMovement(event);
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: {
-                final float x = event.getX();
-                final float y = event.getY();
-                mBackground.actionDown(x, y);
-                mXingxing.actionDown(x, y);
-                if (!mScroller.isFinished()) {
-                    mScroller.abortAnimation();
-                }
-                mLastMotionY = y;
-                mLastMotionX = x;
-                mActivePointerId = event.getPointerId(0);
-                break;
-            }
-            case MotionEvent.ACTION_MOVE:
-                final int activePointerIndex = event.findPointerIndex(mActivePointerId);
-                final float y = event.getY(activePointerIndex);
-                final int deltaY = (int) (mLastMotionY - y);
-                mLastMotionY = y;
 
-                final float x = event.getX(activePointerIndex);
-                final int deltaX = (int) (mLastMotionX - x);
-                mLastMotionX = x;
-              /*  mBackground.actionMove(deltaX, deltaY);
-                mXingxing.actionMove(deltaX, deltaY);
-                ballMove(deltaX,deltaY);*/
-                break;
-            case MotionEvent.ACTION_UP:
-                final VelocityTracker velocityTracker = mVelocityTracker;
-                velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                int initialVelocitx = (int) velocityTracker.getXVelocity();
-                int initialVelocity = (int) velocityTracker.getYVelocity();
-                mBackground.actionUp(initialVelocitx, initialVelocity);
-                mXingxing.actionUp(initialVelocitx, initialVelocity);
-                mActivePointerId = INVALID_POINTER;
-                if (mVelocityTracker != null) {
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
-                }
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                mActivePointerId = INVALID_POINTER;
-                mBackground.actionCancel();
-                mXingxing.actionCancel();
-                if (mVelocityTracker != null) {
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
-                }
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                onSecondaryPointerUp(event);
-                break;
-        }
-        return true;
-    }
 
 
     private void onSecondaryPointerUp(MotionEvent ev) {
