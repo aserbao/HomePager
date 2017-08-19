@@ -20,19 +20,19 @@
         <activity
             android:name=".ttt.ScrollActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         </activity>
         <activity android:name=".AnimaActivity">
+        </activity>
+        <activity
+            android:name=".test.HorizontalFloatLayoutActivity"
+            android:theme="@style/FullScreen">
+        </activity>
+        <activity
+            android:name=".customview.snowball.ohtersnowball.MainActivity"
+            android:theme="@style/FullScreen">
 
         </activity>
-        <activity android:name=".test.HorizontalFloatLayoutActivity"
-            android:theme="@style/FullScreen"
-            >
-
-        </activity>
-        <activity android:name=".customview.snowball.ohtersnowball.MainActivity"
-                android:theme="@style/FullScreen"
-            >
+        <activity android:name=".activitys.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

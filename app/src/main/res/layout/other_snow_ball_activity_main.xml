@@ -13,6 +13,10 @@
     android:contentDescription="@null"
     android:scaleType="fitXY"
     android:src="@drawable/tree" />
+  <FrameLayout
+      android:id="@+id/frame_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
   <com.aserbao.homepager.customview.snowball.ohtersnowball.SnowView
     android:layout_width="match_parent"
@@ -23,7 +27,8 @@
     android:layout_alignRight="@id/image"
     android:layout_alignStart="@id/image"
     android:layout_alignTop="@id/image" />
-  <com.aserbao.homepager.customview.meteorprocession.Meteor
+  <com.aserbao.homepager.customview.meteorprocession.MeteroFlake
+      android:id="@+id/metero_flake"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_alignBottom="@id/image"
@@ -32,4 +37,5 @@
       android:layout_alignRight="@id/image"
       android:layout_alignStart="@id/image"
       android:layout_alignTop="@id/image" />
+
 </RelativeLayout>

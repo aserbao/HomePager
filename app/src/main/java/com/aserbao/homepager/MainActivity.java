@@ -64,11 +64,10 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.background)
     BackgroundScrollView mBackground;
     private HVScrollViewTwo mHvScrollViewTwo;
-//===================================
-
-
+    //===================================
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.from_bottom_to_middle, R.anim.from_middle_to_top);
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

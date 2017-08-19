@@ -1,10 +1,17 @@
 package com.aserbao.homepager.customview.meteorprocession;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.aserbao.homepager.R;
 
 import java.util.Random;
 
@@ -14,52 +21,40 @@ import java.util.Random;
  * weixin: aserbao
  */
 
-public class MeteroFlake {
+public class MeteroFlake extends ViewGroup{
 
-    private final Random random;
-    private final Point position;
-    private float angle;
-    private final Paint paint;
-    private int flakeSize = 15;
 
-    public MeteroFlake(Random random, Point position, Paint paint) {
-        this.random = random;
-        this.position = position;
-        this.paint = paint;
+    private Random mRandom;
+
+    public MeteroFlake(Context context) {
+        this(context,null);
     }
 
-    public static MeteroFlake crete(int width, int height, Paint paint){
-        Random random = new Random();
-        int x = random.nextInt(width);
-        int y = random.nextInt(1920);
-        Point point = new Point(x, y);
-        return new MeteroFlake(random,point,paint);
+    public MeteroFlake(Context context, AttributeSet attrs) {
+        this(context, attrs,0);
     }
 
-    public void draw(Canvas canvas){
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
-        move(width, height);
-        canvas.drawCircle(position.x, position.y, flakeSize, paint);
-    }
-
-    private void move(int width, int height) {
-        double x = position.x - 50;
-        double y = position.y + 50;
-        position.set((int)x,(int) y);
-        if(!isInside(width, height)){
-            reset(width);
+    public MeteroFlake(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        mRandom = new Random();
+        for (int i = 0; i < 15; i++) {
+            View meteor = LayoutInflater.from(context).inflate(R.layout.metor_layout, this, false);
+            LayoutParams layoutParams = meteor.getLayoutParams();
+            layoutParams.width = LayoutParams.WRAP_CONTENT;
+            layoutParams.height = LayoutParams.WRAP_CONTENT;
+            meteor.setLayoutParams(layoutParams);
+            this.addView(meteor);
         }
     }
 
-    private void reset(int width) {
-        position.x = random.nextInt(width);
-        position.y = (int)(-flakeSize - 1);
-    }
-
-    private boolean isInside(int width, int height) {
-        int x = position.x;
-        int y = position.y;
-        return x >= -flakeSize - 1 && x + flakeSize <= width && y >= -flakeSize - 1 && y - flakeSize < height;
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            int l1 = getWidth() / 2 + mRandom.nextInt(getWidth() / 2);
+            int t1 = mRandom.nextInt(getHeight() / 2);
+            child.layout(l1, t1,l1+child.getWidth(),t1+ child.getHeight());
+        }
     }
 }
