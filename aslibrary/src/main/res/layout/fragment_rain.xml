@@ -1,0 +1,15 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:effect="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".particle.MainActivity" >
+
+    <com.lxf.particle.widget.RainAnimation
+        android:id="@+id/act_main_rain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/home_item_background"
+        effect:itemNum="180" />
+
+</RelativeLayout>

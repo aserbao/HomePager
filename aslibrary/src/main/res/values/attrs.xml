@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EffectAnimation">
+        <attr name="itemNum" format="integer" />
+        <attr name="itemColor" format="color" />
+        <attr name="randColor" format="boolean"/>
+        <attr name="clipScale" format="boolean"/>
+    </declare-styleable>
+</resources>
