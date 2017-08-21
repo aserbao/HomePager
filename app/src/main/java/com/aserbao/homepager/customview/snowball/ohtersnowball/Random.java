@@ -1,6 +1,6 @@
 package com.aserbao.homepager.customview.snowball.ohtersnowball;
 
-class Random {
+public class Random {
     private static final java.util.Random RANDOM = new java.util.Random();
 
     public float getRandom(float lower, float upper) {

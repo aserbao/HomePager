@@ -1,13 +1,6 @@
 package com.aserbao.homepager.customview.customview;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
@@ -15,8 +8,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.aserbao.homepager.R;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -26,13 +19,14 @@ import java.util.Random;
  * weixin: aserbao
  */
 
-public class MeteorView extends ImageView implements ValueAnimator.AnimatorListener{
-
+public class MeteorView extends ImageView {
+    public static final int DELAY = 10;
+//    private short final int SPEED = 10
+    private int NUM = 5;
     private Random mRandom;
     private Handler mHandler;
-    private int mAddWidth = 5;
-    private int mAddHeight = 100;
-
+    private Meteor[] mMeteors ;
+    private List<Integer> speed = new ArrayList<>();
     public MeteorView(Context context) {
         this(context,null);
     }
@@ -52,34 +46,36 @@ public class MeteorView extends ImageView implements ValueAnimator.AnimatorListe
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (w != oldw || h != oldh) {
+            resize(w, h);
+        }
+    }
+
+    private void resize(int w, int h) {
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
+        mMeteors = new Meteor[NUM];
+        for (int i = 0; i < mMeteors.length; i++) {
+            mMeteors[i] = Meteor.create(getWidth(),getHeight(),paint);
+        }
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
-        PropertyValuesHolder x = PropertyValuesHolder.ofFloat("translationX", getWidth()/2 + mAddWidth, 0);
-        PropertyValuesHolder y = PropertyValuesHolder.ofFloat("translationY", mAddHeight, getWidth()/2+2*mAddHeight);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(this, x, y);
-        animator.addListener(this);
-        animator.setDuration(1000);
-        animator.start();
         super.onDraw(canvas);
-    }
-    @Override
-    public void onAnimationStart(Animator animation) {
-
-    }
-
-    @Override
-    public void onAnimationEnd(Animator animation) {
-        mAddWidth = mRandom.nextInt(1080);
-        mAddHeight = mRandom.nextInt(1080);
-        postInvalidate();
+        for (int i = 0; i < mMeteors.length; i++) {
+            mMeteors[i].draw(canvas,getResources(),i);
+        }
+        getHandler().postDelayed(mRunnable, DELAY);
     }
 
-    @Override
-    public void onAnimationCancel(Animator animation) {
-
-    }
-
-    @Override
-    public void onAnimationRepeat(Animator animation) {
-
-    }
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            invalidate();
+        }
+    };
 }
