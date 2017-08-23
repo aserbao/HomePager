@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="translate">#0000</color>
+    <color name="gray">#333333</color>
 </resources>

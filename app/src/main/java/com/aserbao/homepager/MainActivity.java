@@ -111,4 +111,9 @@ public class MainActivity extends AppCompatActivity {
         rotation.start();
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.from_top_to_middle,R.anim.from_middle_to_bottom);
+    }
 }
