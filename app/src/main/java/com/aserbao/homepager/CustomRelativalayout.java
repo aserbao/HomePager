@@ -100,7 +100,6 @@ public class CustomRelativalayout extends RelativeLayout implements GestureDetec
                 }
             }
         }
-        Toast.makeText(getContext(), String.valueOf(distanceY), Toast.LENGTH_SHORT).show();
         return false;
     }
 

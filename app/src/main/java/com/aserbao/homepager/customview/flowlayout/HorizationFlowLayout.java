@@ -32,18 +32,19 @@ public class HorizationFlowLayout extends ViewGroup
 
 	private void init(Context mContext,AttributeSet attrs) {
 		Random random = new Random();
-		for (int i = 0; i < 150; i++) {
+		for (int i = 0; i < 1000; i++) {
 			RadioButton rb = new RadioButton(mContext);
 			int anInt = random.nextInt(sName.length);
 			rb.setText(sName[anInt]);
 			rb.setMaxLines(1);
 			rb.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 			rb.setButtonDrawable(null);
-			MarginLayoutParams layoutParams = new MarginLayoutParams(mContext,attrs);
-			layoutParams.setMargins(random.nextInt(200),random.nextInt(100),0,0);
-			rb.setLayoutParams(layoutParams);
-			/*rb.setWidth(90);
-			rb.setHeight(91);*/
+			/*MarginLayoutParams layoutParams = new MarginLayoutParams(mContext,attrs);
+			layoutParams.setMargins(random.nextInt(300),random.nextInt(100),0,0);
+			rb.setLayoutParams(layoutParams);*/
+			rb.setPadding(random.nextInt(300),random.nextInt(100),0,0);
+			/*rb.setWidth(290);
+			rb.setHeight(391);*/
 //			rb.setHeight(190+random.nextInt(300));
 			Drawable drawable = getResources().getDrawable(R.drawable.help_dian);
 			rb.setCompoundDrawablesWithIntrinsicBounds(null,null,null,drawable);
@@ -100,7 +101,7 @@ public class HorizationFlowLayout extends ViewGroup
 		int lineHeight = 0;
 
 		int cCount = getChildCount();
-
+		Random random = new Random();
 		// 遍历每个子元素
 		for (int i = 0; i < cCount; i++)
 		{
@@ -110,6 +111,8 @@ public class HorizationFlowLayout extends ViewGroup
 			// 得到child的lp
 			MarginLayoutParams lp = (MarginLayoutParams) child
 					.getLayoutParams();
+			/*lp.setMargins(random.nextInt(300),random.nextInt(100),0,0);
+			child.setLayoutParams(lp);*/
 			// 当前子空间实际占据的宽度
 			int childWidth = child.getMeasuredWidth() + lp.leftMargin
 					+ lp.rightMargin;
@@ -126,6 +129,7 @@ public class HorizationFlowLayout extends ViewGroup
 				// 叠加当前高度，
 				width += lineWidth;
 				// 开启记录下一行的高度
+				Log.e("onlayout  + onMeasure", "第" + i + "  lineWidth:=====" + lineWidth);
 				lineWidth = childWidth;
 			} else
 			// 否则累加值lineWidth,lineHeight取最大高度
@@ -139,10 +143,11 @@ public class HorizationFlowLayout extends ViewGroup
 				height = Math.max(height, lineHeight);
 				width += lineWidth;
 			}
-
 		}
-		setMeasuredDimension((modeWidth == MeasureSpec.EXACTLY) ? sizeWidth
-				: width , (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight
+//		setMeasuredDimension(3647,1905);
+		Log.e("onlayout  + onMeasure", "第" +"width:=====" + width+ "height:"+height +"final====================");
+		setMeasuredDimension((modeWidth == MeasureSpec.EXACTLY) ? sizeWidth - (1 * cCount)
+				: width - (1 * cCount) , (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight
 				: height);
 
 	}
@@ -174,26 +179,27 @@ public class HorizationFlowLayout extends ViewGroup
 			View child = getChildAt(i);
 			MarginLayoutParams lp = (MarginLayoutParams) child
 					.getLayoutParams();
-			int childWidth = child.getMeasuredWidth();
-			int childHeight = child.getMeasuredHeight();
+			int childWidth = child.getMeasuredWidth() + lp.leftMargin
+					+ lp.rightMargin;
+			// 当前子空间实际占据的高度
+			int childHeight = child.getMeasuredHeight() + lp.topMargin
+					+ lp.bottomMargin;
 
 			// 如果已经需要换行
-			if (childHeight + lp.topMargin + lp.bottomMargin + lineHeight > height)
+			if (childHeight + lineHeight > height)
 			{
 				// 记录这一行所有的View以及最大宽度
 				mLineWidth.add(lineWidth);
 				// 将当前行的childView保存，然后开启新的ArrayList保存下一行的childView
 				mAllViews.add(lineViews);
+				lineWidth = 0;
 				lineHeight = 0;// 重置行宽
 				lineViews = new ArrayList<View>();
+			}else {
+				lineHeight += childHeight;
+				lineWidth = Math.max(lineWidth, childWidth);
+				lineViews.add(child);
 			}
-			/**
-			 * 如果不需要换行，则累加
-			 */
-			lineHeight += childHeight + lp.topMargin + lp.bottomMargin;
-			lineWidth = Math.max(lineWidth, childWidth + lp.leftMargin
-					+ lp.rightMargin);
-			lineViews.add(child);
 		}
 		// 记录最后一行
 		mLineWidth.add(lineWidth);
@@ -210,8 +216,6 @@ public class HorizationFlowLayout extends ViewGroup
 			// 当前行的最大高度
 			lineWidth = mLineWidth.get(i);
 
-			Log.e(TAG, "第" + i + "行 ：" + lineViews.size() + " , " + lineViews);
-			Log.e(TAG, "第" + i + "行， ：" + lineHeight);
 
 			// 遍历当前行所有的View
 			for (int j = 0; j < lineViews.size(); j++)
@@ -241,6 +245,7 @@ public class HorizationFlowLayout extends ViewGroup
 			}
 			top = 0;
 			left += lineWidth;
+			Log.e("onlayout", "第" + i + "   lineWidth:=====" + lineWidth + "left =====" + left);
 		}
 
 	}

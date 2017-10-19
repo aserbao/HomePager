@@ -464,7 +464,6 @@ public class BackgroundScrollView extends FrameLayout {
                 break;
             }
             case MotionEvent.ACTION_MOVE:
-                Toast.makeText(getContext(), String.valueOf(mIsBeingDragged), Toast.LENGTH_SHORT).show();
                 if (mIsBeingDragged) {
                     // Scroll to follow the motion event
                     final int activePointerIndex = ev.findPointerIndex(mActivePointerId);

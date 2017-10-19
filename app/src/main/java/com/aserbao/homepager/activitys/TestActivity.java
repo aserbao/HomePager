@@ -7,13 +7,17 @@ import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
-import com.aserbao.homepager.MainActivity;
 import com.aserbao.homepager.R;
+import com.aserbao.homepager.customview.snowball.ohtersnowball.MainActivity;
+import com.bumptech.glide.Glide;
 
 import java.util.Random;
 
@@ -24,15 +28,42 @@ public class TestActivity extends AppCompatActivity {
 
     @BindView(R.id.frame_layout)
     FrameLayout mFrameLayout;
+    @BindView(R.id.image_view)
+    ImageView mImageView;
     private Random mRandom;
-    private int curosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test2);
         ButterKnife.bind(this);
-        init();
+        Glide.with(this).load(R.drawable.rocketloading).into(mImageView);
+//        init();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void init() {
@@ -57,7 +88,7 @@ public class TestActivity extends AppCompatActivity {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                        mFrameLayout.removeView(view);
+                    mFrameLayout.removeView(view);
                 }
             });
             animator.start();
@@ -67,10 +98,22 @@ public class TestActivity extends AppCompatActivity {
             public void run() {
                 init();
             }
-        },1500);
+        }, 1500);
     }
 
     public void jump(View view) {
         startActivity(new Intent(this, MainActivity.class));
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
+
 }
